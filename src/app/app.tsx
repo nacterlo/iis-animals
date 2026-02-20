@@ -7,5 +7,3 @@ export function App() {
 }
 
 export default App;
-
-// 9:x4P_}1Gwc=

@@ -38,9 +38,8 @@ export function LoginForm() {
         setShowPassword(!showPassword);
     };
 
-    const onSubmit = (data: z.infer<typeof loginFormSchema>) => {
-        login(data)
-    }
+    const onSubmit = (data: z.infer<typeof loginFormSchema>) => login(data)
+    
     return (
         <form className="flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>

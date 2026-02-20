@@ -116,9 +116,11 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 selection:bg-primary selection:text-primary-foreground;
   }
 
   body {
@@ -129,7 +131,31 @@
     @apply font-sans;
   }
 
-  button {
-    @apply cursor-pointer;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+
+
+  /* Убрать цвет автозаполнения */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #000000;
+    caret-color: #000000;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px transparent;
+  }
+
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus,
+  .dark input:-webkit-autofill:active {
+    caret-color: #ffffff;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
   }
 }
