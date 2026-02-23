@@ -12,10 +12,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/kit/sidebar"
-import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, BeefIcon, SlackIcon } from "lucide-react"
+import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon } from "lucide-react"
 
 import Cattle from "@/features/sidebar/assets/cow.svg?react"
-// import Cattle from "@/shared/assets/cow.svg?react"
 import Pig from "@/features/sidebar/assets/pig.svg?react"
 import Horse from "@/features/sidebar/assets/horse.svg?react"
 import Sheep from "@/features/sidebar/assets/sheep.svg?react"
@@ -24,7 +23,6 @@ import Deer from "@/features/sidebar/assets/deer.svg?react"
 import Camel from "@/features/sidebar/assets/camel.svg?react"
 import Mink from "@/features/sidebar/assets/mink.svg?react"
 import Fish from "@/features/sidebar/assets/fish.svg?react"
-import SpermDark from "@/features/sidebar/assets/spermDark.svg?react"
 import Bee from "@/features/sidebar/assets/bee.svg?react"
 
 const data = {
@@ -36,11 +34,22 @@ const data = {
   navMain: [
     {
       title: "Крупный рогатый скот",
-      url: "/cattle",
+      url: "/cattle/dairy",
       icon: (
         <Cattle
         />
       ),
+      isActive: true,
+      items: [
+        {
+          title: "Молочного направления",
+          url: "#",
+        },
+        {
+          title: "Мясного направления",
+          url: "#",
+        },
+      ],
     },
     {
       title: "Свиньи",

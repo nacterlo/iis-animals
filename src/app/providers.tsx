@@ -13,14 +13,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
-            <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 <Toaster closeButton richColors />
                 <TooltipProvider>
-                    <div className="[--header-height:calc(--spacing(14))]">
-                        <SidebarProvider className="flex flex-col">
-                            {children}
-                        </SidebarProvider>
-                    </div>
+                    <SidebarProvider className="flex flex-col">
+                        {children}
+                    </SidebarProvider>
                 </TooltipProvider>
             </ThemeProvider>
         </QueryClientProvider>

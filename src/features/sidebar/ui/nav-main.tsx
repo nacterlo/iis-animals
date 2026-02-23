@@ -4,6 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
 } from "@/shared/ui/kit/sidebar"
+import { Building2Icon, HomeIcon } from "lucide-react"
 import { Link, useLocation } from "react-router"
 
 export function NavMain({
@@ -23,7 +24,23 @@ export function NavMain({
   const location = useLocation()
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Вид животного</SidebarGroupLabel>
+
+      <SidebarGroupLabel className="font-extrabold">Навигация</SidebarGroupLabel>
+      <SidebarMenuButton
+        isActive={location.pathname.includes("/home")}
+        render={<Link to="/home" />}
+      >
+        <HomeIcon />
+        <span>Главная</span>
+      </SidebarMenuButton>
+      <SidebarMenuButton
+        isActive={location.pathname.includes("/organization")}
+        render={<Link to="/organization" />}
+      >
+        <Building2Icon />
+        <span>Управление организациями</span>
+      </SidebarMenuButton>
+      <SidebarGroupLabel className="font-bold mt-2">Вид животного</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuButton
@@ -34,6 +51,7 @@ export function NavMain({
             {item.icon}
             <span>{item.title}</span>
           </SidebarMenuButton>
+
         ))}
       </SidebarMenu>
     </SidebarGroup>
