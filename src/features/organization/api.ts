@@ -1,4 +1,5 @@
 import api from "@/shared/api/instance-axios";
+import type { CreateOrganization } from "./model/types";
 
 type OrganizationSmall = {
     countryCode: string,
@@ -26,9 +27,9 @@ type OrganizationFull = {
 }
 
 type CommunicationsList = {
-    channelCode: string,
-    contact: string,
-    name: string
+    channelCode: string, // канал связи
+    contact: string, // кто на связи
+    name: string // конкретный контакт
 }
 type AddressList = {
     addressKindCode: string, // Тип адреса
@@ -50,10 +51,14 @@ type AddressList = {
 
 export const organizationApi = {
     getOrganizationList: () =>
-        api.get<OrganizationList>(`/organization/list?limit=300&page=1`)
+        api.get<OrganizationList>(`/organization/list?limit=500&page=1`)
             .then(response => response.data),
 
     getOrganizationDetail: (id: number) =>
         api.get<OrganizationFull>(`/organization/${id}`)
-            .then(response => response.data)
+            .then(response => response.data),
+
+    createOrganization: (createData: CreateOrganization) =>
+        api.post<void>(`/organization`, createData)
+            .then(response => console.log(response))
 }

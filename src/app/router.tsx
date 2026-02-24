@@ -6,6 +6,7 @@ import { AnimalsPage } from "@/features/animals/animals.page";
 import { CattlePage } from "@/features/animals/pages/cattle.page";
 import { SiteLayout } from "@/shared/ui/layout";
 import { OrganizationDetail } from "@/features/organization/organization-detail";
+import { OrganizationCreatePage } from "@/features/organization/organization-create";
 
 
 
@@ -43,7 +44,8 @@ export const router = createBrowserRouter([
                                 lazy: () => import("@/features/organization/organization.page"),
                                 HydrateFallback: () => <div>Loading...</div>,
                             },
-                            { path: ":id", element: <OrganizationDetail /> }
+                            { path: ":id", element: <OrganizationDetail /> },
+                            { path: "create", element: <OrganizationCreatePage /> }
                         ]
                     }
                 ]

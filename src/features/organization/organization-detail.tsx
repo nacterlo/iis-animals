@@ -1,13 +1,12 @@
 import { Button } from "@/shared/ui/kit/button"
-import { Card } from "@/shared/ui/kit/card"
-import { ArrowBigLeftIcon } from "lucide-react"
+import { ArrowBigLeftIcon, SaveIcon } from "lucide-react"
 import { useNavigate, useParams } from "react-router"
 import { useOrganizationDetail } from "./model/use-organization-detail"
-import { InputGroup, InputGroupInput } from "@/shared/ui/kit/input-group"
-import { Textarea } from "@/shared/ui/kit/textarea"
+import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/shared/ui/kit/input-group"
 import { Field, FieldLabel } from "@/shared/ui/kit/field"
 import { Separator } from "@/shared/ui/kit/separator"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/kit/select"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/kit/tooltip"
 
 
 
@@ -22,17 +21,22 @@ export function OrganizationDetail() {
     console.log(organization);
 
     return (
-        <div className="self-center w-5xl">
-            <Button variant="ghost" size="xs" onClick={() => navigate(-1)}>
-                <ArrowBigLeftIcon />
-                Организации
-            </Button>
+        <div className="self-center">
+            <Tooltip>
+                <TooltipTrigger render={<Button variant="ghost" size="xs" onClick={() => navigate(-1)}>
+                    <ArrowBigLeftIcon />
+                    Организации
+                </Button>} />
+                <TooltipContent side="bottom">
+                    <p>Вернуться к списку организаций</p>
+                </TooltipContent>
+            </Tooltip>
             {organization && (
 
                 <form className="p-2 mt-2">
                     <Separator />
-                    <div className="px-2 py-4 grid grid-cols-[1fr_1fr]">
-                        <div className="flex flex-col self-center">
+                    <div className="px-2 py-4 grid grid-cols-[1fr_1.5fr]">
+                        <div className="flex flex-col self-start">
                             <h2 className="text-lg font-bold">Общая информация</h2>
                             <p className="text-sm text-muted-foreground">Перечень общих данных организации</p>
                         </div>
@@ -40,13 +44,13 @@ export function OrganizationDetail() {
                             <Field>
                                 <FieldLabel htmlFor="organization-name-full" className="text-xs">Полное</FieldLabel>
                                 <InputGroup>
-                                    <Textarea id="organization-name-full" defaultValue={organization?.businessEntityName} />
+                                    <InputGroupTextarea id="organization-name-full" defaultValue={organization?.businessEntityName} />
                                 </InputGroup>
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="organization-name-small" className="text-xs">Сокращенное</FieldLabel>
                                 <InputGroup>
-                                    <Textarea id="organization-name-small" defaultValue={organization?.businessEntityBriefName} />
+                                    <InputGroupTextarea id="organization-name-small" defaultValue={organization?.businessEntityBriefName} />
                                 </InputGroup>
                             </Field>
                             <div className="flex gap-2">
@@ -60,7 +64,17 @@ export function OrganizationDetail() {
                                     <FieldLabel htmlFor="checkout-exp-month-ts6" className="text-xs">
                                         Код страны
                                     </FieldLabel>
-                                    <Select defaultValue={organization.countryCode}>
+                                    <Select
+                                        defaultValue={organization.countryCode}
+                                        items={[
+                                            { value: "AM", label: "AM (Республика Армения)" },
+                                            { value: "BY", label: "BY (Республика Беларусь)" },
+                                            { value: "KZ", label: "KZ (Республика Казахстан)" },
+                                            { value: "KG", label: "KG (Кыргызская Республика)" },
+                                            { value: "RU", label: "RU (Российская Федерация)" },
+                                            { value: "EE", label: "EE (Эстония)" },
+                                        ]}
+                                    >
                                         <SelectTrigger id="checkout-exp-month-ts6">
                                             <SelectValue />
                                         </SelectTrigger>
@@ -80,8 +94,8 @@ export function OrganizationDetail() {
                         </div>
                     </div>
                     <Separator />
-                    <div className="px-2 py-4 grid grid-cols-[1fr_1fr]">
-                        <div className="flex flex-col self-center">
+                    <div className="px-2 py-4 grid grid-cols-[1fr_1.5fr]">
+                        <div className="flex flex-col self-start">
                             <h2 className="text-lg font-bold">Адреса организации</h2>
                             <p className="text-sm text-muted-foreground">Список адресов организации</p>
                         </div>
@@ -114,7 +128,7 @@ export function OrganizationDetail() {
                                             <Field>
                                                 <FieldLabel htmlFor="organization-address" className="text-xs">Населенный пункт</FieldLabel>
                                                 <InputGroup>
-                                                    <InputGroupInput placeholder="Укажите населенный пункт" id="organization-address" defaultValue={address.settlementName} />
+                                                    <InputGroupInput placeholder="Укажите населенный пункт" id="organization-address" defaultValue={address.cityName} />
                                                 </InputGroup>
                                             </Field>
                                             <Field>
@@ -155,13 +169,60 @@ export function OrganizationDetail() {
                         </div>
                     </div>
                     <Separator />
-                    <div className="px-2 py-4 grid grid-cols-[1fr_1fr]">
-                        <div className="flex flex-col self-center">
+                    <div className="px-2 py-4 grid grid-cols-[1fr_1.5fr]">
+                        <div className="flex flex-col self-start">
                             <h2 className="text-lg font-bold">Контакты организации</h2>
                             <p className="text-sm text-muted-foreground">Список контактов организации</p>
                         </div>
                         <div className="flex flex-col gap-5">
-
+                            {organization.communicationsList?.map((communication) => (
+                                <div key={communication.channelCode} className="flex gap-2">
+                                    <Field>
+                                        <FieldLabel htmlFor="organization-communication" className="text-xs">{communication.name}</FieldLabel>
+                                        <Separator />
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <InputGroup>
+                                                <InputGroupInput placeholder="Укажите контакт" id="organization-communication" defaultValue={communication.contact} />
+                                            </InputGroup>
+                                            <Field>
+                                                <Select defaultValue={communication.channelCode}>
+                                                    <SelectTrigger id="checkout-exp-month-ts6">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectItem value="AO">AO (Веб-сайт)</SelectItem>
+                                                            <SelectItem value="EM">EM (Электронная почта)</SelectItem>
+                                                            <SelectItem value={'FX'}>FX (Телефакс)</SelectItem>
+                                                            <SelectItem value={'TE'}>TE (Телефон)</SelectItem>
+                                                            <SelectItem value={'TG'}>TG (Телеграф)</SelectItem>
+                                                            <SelectItem value={'TL'}>TL (Телекс)</SelectItem>
+                                                            <SelectItem value={'ZA'}>ZA (Специальная связь)</SelectItem>
+                                                            <SelectItem value={'ZB'}>ZB (Радиосвязь)</SelectItem>
+                                                            <SelectItem value={'ZZ'}>ZZ (Иной вид связи)</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </Field>
+                                        </div>
+                                    </Field>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <Separator />
+                    <div className="px-2 py-4">
+                        <div className="flex direction-alternate-reverse items-center justify-end gap-2">
+                            <Button
+                                variant="outline"
+                                size='sm'
+                            >
+                                Отменить изменения
+                            </Button>
+                            <Button size='sm'>
+                                <SaveIcon />
+                                Сохранить изменения
+                            </Button>
                         </div>
                     </div>
                 </form>
