@@ -7,8 +7,36 @@ import { Field, FieldLabel } from "@/shared/ui/kit/field"
 import { Separator } from "@/shared/ui/kit/separator"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/kit/select"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/kit/tooltip"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/shared/ui/kit/alert-dialog"
 
 
+const AcceptChange = () => {
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger
+                render={
+                    <Button size='sm'>
+                        <SaveIcon />
+                        Сохранить изменения
+                    </Button>
+                }
+            />
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Подтвердите изменения.</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        from our servers.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Отмена</AlertDialogCancel>
+                    <AlertDialogAction className='bg-green-400'>Подтвердить</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
+}
 
 
 export function OrganizationDetail() {
@@ -27,12 +55,11 @@ export function OrganizationDetail() {
                     <ArrowBigLeftIcon />
                     Организации
                 </Button>} />
-                <TooltipContent side="bottom">
+                <TooltipContent side="top">
                     <p>Вернуться к списку организаций</p>
                 </TooltipContent>
             </Tooltip>
             {organization && (
-
                 <form className="p-2 mt-2">
                     <Separator />
                     <div className="px-2 py-4 grid grid-cols-[1fr_1.5fr]">
@@ -128,7 +155,7 @@ export function OrganizationDetail() {
                                             <Field>
                                                 <FieldLabel htmlFor="organization-address" className="text-xs">Населенный пункт</FieldLabel>
                                                 <InputGroup>
-                                                    <InputGroupInput placeholder="Укажите населенный пункт" id="organization-address" defaultValue={address.cityName} />
+                                                    <InputGroupInput placeholder="Укажите населенный пункт" id="organization-address" defaultValue={address.settlementName} />
                                                 </InputGroup>
                                             </Field>
                                             <Field>
@@ -178,14 +205,27 @@ export function OrganizationDetail() {
                             {organization.communicationsList?.map((communication) => (
                                 <div key={communication.channelCode} className="flex gap-2">
                                     <Field>
-                                        <FieldLabel htmlFor="organization-communication" className="text-xs">{communication.name}</FieldLabel>
+                                        <FieldLabel htmlFor="organization-communication" className="text-xs">{communication.channelCode}, {communication.name}</FieldLabel>
                                         <Separator />
                                         <div className="grid grid-cols-2 gap-4">
                                             <InputGroup>
                                                 <InputGroupInput placeholder="Укажите контакт" id="organization-communication" defaultValue={communication.contact} />
                                             </InputGroup>
                                             <Field>
-                                                <Select defaultValue={communication.channelCode}>
+                                                <Select
+                                                    defaultValue={communication.channelCode}
+                                                    items={[
+                                                        { value: "AO", label: "AO (Веб-сайт)" },
+                                                        { value: "EM", label: "EM (Электронная почта)" },
+                                                        { value: "FX", label: "FX (Телефакс)" },
+                                                        { value: "TE", label: "TE (Телефон)" },
+                                                        { value: "TG", label: "TG (Телеграф)" },
+                                                        { value: "TL", label: "TL (Телекс)" },
+                                                        { value: "ZA", label: "ZA (Специальная связь)" },
+                                                        { value: "ZB", label: "ZB (Радиосвязь)" },
+                                                        { value: "ZZ", label: "ZZ (Иной вид связи)" },
+                                                    ]}
+                                                >
                                                     <SelectTrigger id="checkout-exp-month-ts6">
                                                         <SelectValue />
                                                     </SelectTrigger>
@@ -204,6 +244,7 @@ export function OrganizationDetail() {
                                                     </SelectContent>
                                                 </Select>
                                             </Field>
+
                                         </div>
                                     </Field>
                                 </div>
@@ -219,10 +260,11 @@ export function OrganizationDetail() {
                             >
                                 Отменить изменения
                             </Button>
-                            <Button size='sm'>
+                            <AcceptChange />
+                            {/* <Button size='sm'>
                                 <SaveIcon />
                                 Сохранить изменения
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                 </form>

@@ -24,7 +24,6 @@ export function NavMain({
   const location = useLocation()
   return (
     <SidebarGroup>
-
       <SidebarGroupLabel className="font-extrabold">Навигация</SidebarGroupLabel>
       <SidebarMenuButton
         isActive={location.pathname.includes("/home")}
@@ -36,8 +35,9 @@ export function NavMain({
       <SidebarMenuButton
         isActive={location.pathname.includes("/organization")}
         render={<Link to="/organization" />}
+        className="mt-1"
       >
-        <Building2Icon />
+        <Building2Icon className="text-primary"/>
         <span>Управление организациями</span>
       </SidebarMenuButton>
       <SidebarGroupLabel className="font-bold mt-2">Вид животного</SidebarGroupLabel>
@@ -47,6 +47,7 @@ export function NavMain({
             isActive={location.pathname.includes(item.url)}
             key={item.title}
             render={<Link to={item.url} />}
+            tooltip={item.items ? item.title : ''}
           >
             {item.icon}
             <span>{item.title}</span>

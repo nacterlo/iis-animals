@@ -1,42 +1,15 @@
-import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/shared/ui/kit/field"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupTextarea } from "@/shared/ui/kit/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/kit/select"
 import { Button } from "@/shared/ui/kit/button"
-import { XIcon } from "lucide-react"
+import { RadioTowerIcon, XIcon } from "lucide-react"
 import { Separator } from "@/shared/ui/kit/separator"
+import { createOrganizationSchema, type CreateOrganization } from "../model/types"
 
 
-const createOrganizationSchema = z
-    .object({
-        businessEntityBriefName: z.string().min(1, "Поле обязательно").max(100, "Максимальная длина 100 символов"),
-        businessEntityName: z.string().min(1, "Поле обязательно").max(100, "Максимальная длина 100 символов"),
-        businessEntityTypeName: z.string(),
-        countryCode: z.string().min(1, "Поле обязательно").max(100, "Максимальная длина 100 символов"),
-        taxpayer: z.string().min(1, "Поле обязательно").max(100, "Максимальная длина 100 символов"),
-        taxRegistrationReasonCode: z.string(),
-        uniqueCustomsNumber: z.string(),
-        addressList: z.array(z.object({
-            addressKindCode: z.string(),
-            buildingNumber: z.string(),
-            cityName: z.string(),
-            districtName: z.string(),
-            postCode: z.string(),
-            postOfficeBox: z.string(),
-            regionName: z.string(),
-            roomNumber: z.string(),
-            settlementName: z.string(),
-            streetName: z.string(),
-            territoryCode: z.string(),
-            countryCodeType: z.string(),
-        }))
-    })
-
-export function CreateOrganizationForm() {
-
-
+export function CreateOrganizationForm({ createOrganization }: { createOrganization: (data: CreateOrganization) => void }) {
     const form = useForm({
         resolver: zodResolver(createOrganizationSchema),
         defaultValues: {
@@ -61,20 +34,29 @@ export function CreateOrganizationForm() {
                 territoryCode: "",
                 countryCodeType: "",
             }],
+            communicationsList: [{
+                channelCode: "",
+                contact: "",
+                name: ""
+            }]
         }
     })
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields: addressListFields, append: appendAddressList, remove: removeAddressList } = useFieldArray({
         control: form.control,
         name: "addressList",
     })
 
-    const onSubmit = (data: z.infer<typeof createOrganizationSchema>) => {
-        console.log(data)
-    }
+    const { fields: communicationsListFields, append: appendCommunicationsList, remove: removeCommunicationsList } = useFieldArray({
+        control: form.control,
+        name: "communicationsList"
+    })
+
+    const onSubmit = form.handleSubmit(createOrganization);
+    // const onSubmit = form.handleSubmit((data) => console.log(data));
 
     return (
-        <form id="organization-create-form" className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="organization-create-form" className="flex flex-col gap-6" onSubmit={onSubmit}>
             <FieldGroup className="grid grid-cols-[1.2fr_1fr] gap-4">
                 <Controller
                     name="businessEntityName"
@@ -146,7 +128,7 @@ export function CreateOrganizationForm() {
                                 <FieldLabel htmlFor="countryCode" className="text-xs">
                                     Код страны
                                 </FieldLabel>
-                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+
                             </FieldContent>
                             <Select
                                 name={field.name}
@@ -178,6 +160,7 @@ export function CreateOrganizationForm() {
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                         </Field>
                     )}
                 />
@@ -195,6 +178,9 @@ export function CreateOrganizationForm() {
                                     aria-invalid={fieldState.invalid}
                                 />
                             </InputGroup>
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
                         </Field>
                     )}
                 />
@@ -233,6 +219,7 @@ export function CreateOrganizationForm() {
                     )}
                 />
             </FieldGroup>
+            <Separator />
             <FieldSet className="gap-4">
                 <FieldLegend variant="label">
                     Адреса организации
@@ -242,55 +229,57 @@ export function CreateOrganizationForm() {
                     </div> */}
                 </FieldLegend>
                 <FieldDescription className="text-xs">
-                    Укажите адрес регистрации, фактический адрес и почтовый адрес.
+                    Укажите адрес регистрации, фактический адрес и (или) почтовый адрес.
                 </FieldDescription>
                 <div className="flex gap-2 items-center justify-start">
                     <Button
                         type="button"
-                        variant={fields.some((field) => field.addressKindCode === "1") ? "default" : "outline"}
+                        variant={addressListFields.some((field) => field.addressKindCode === "1") ? "default" : "outline"}
                         size="xs"
                         className="w-1/6"
                         onClick={() => {
-                            append({ addressKindCode: "1", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
+                            appendAddressList({ addressKindCode: "1", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
                         }}
-                        disabled={fields.some((field) => field.addressKindCode === "1")}
+                        disabled={addressListFields.some((field) => field.addressKindCode === "1")}
                     >
                         Добавить адрес регистрации
                     </Button>
                     <Button
                         type="button"
-                        variant={fields.some((field) => field.addressKindCode === "2") ? "default" : "outline"}
+                        variant={addressListFields.some((field) => field.addressKindCode === "2") ? "default" : "outline"}
                         size="xs"
                         className="w-1/6"
                         onClick={() => {
-                            append({ addressKindCode: "2", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
+                            appendAddressList({ addressKindCode: "2", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
                         }}
-                        disabled={fields.some((field) => field.addressKindCode === "2")}
+                        disabled={addressListFields.some((field) => field.addressKindCode === "2")}
                     >
                         Добавить фактический адрес
                     </Button>
                     <Button
                         type="button"
-                        variant={fields.some((field) => field.addressKindCode === "3") ? "default" : "outline"}
+                        variant={addressListFields.some((field) => field.addressKindCode === "3") ? "default" : "outline"}
                         size="xs"
                         className="w-1/6"
                         onClick={() => {
 
-                            append({ addressKindCode: "3", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
+                            appendAddressList({ addressKindCode: "3", buildingNumber: "", cityName: "", districtName: "", postCode: "", postOfficeBox: "", regionName: "", roomNumber: "", settlementName: "", streetName: "", territoryCode: "", countryCodeType: "" })
                         }}
-                        disabled={fields.some((field) => field.addressKindCode === "3")}
+                        disabled={addressListFields.some((field) => field.addressKindCode === "3")}
                     >
                         Добавить почтовый адрес
                     </Button>
                 </div>
                 <FieldGroup className="flex flex-col gap-4">
-                    {fields.map((field, index) => (
-                        <Field key={field.id}>
-                            <Separator className={index === 0 ? "hidden" : ""} />
+                    {addressListFields.map((field, index) => (
+                        <Field key={field.id} className="border-2 border-primary/50 p-2 rounded-2xl">
+                            {/* <Separator className={index === 0 ? "hidden" : ""} /> */}
                             <FieldLabel htmlFor={`addressList.${index}.addressKindCode`} className="text-xs">
                                 {field.addressKindCode === "1" ? "Адрес регистрации" : field.addressKindCode === "2" ? "Адрес фактический" : "Адрес почтовый"}
                             </FieldLabel>
-                            <FieldGroup className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-4">
+                            <Separator />
+                            {/* <FieldGroup className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-4"> */}
+                            <FieldGroup className="grid grid-cols-6 gap-4">
                                 <Controller
                                     name={`addressList.${index}.regionName`}
                                     control={form.control}
@@ -352,26 +341,6 @@ export function CreateOrganizationForm() {
                                     )}
                                 />
                                 <Controller
-                                    name={`addressList.${index}.streetName`}
-                                    control={form.control}
-                                    render={({ field: controllerField, fieldState }) => (
-                                        <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel htmlFor={`addressList.${index}.streetName`} className="text-xs">Улица</FieldLabel>
-                                            <InputGroup>
-                                                <InputGroupInput
-                                                    {...controllerField}
-                                                    aria-invalid={fieldState.invalid}
-                                                    id={`addressList.${index}.streetName`}
-                                                    placeholder="Улица"
-                                                />
-                                            </InputGroup>
-                                            {fieldState.invalid && (
-                                                <FieldError errors={[fieldState.error]} />
-                                            )}
-                                        </Field>
-                                    )}
-                                />
-                                <Controller
                                     name={`addressList.${index}.settlementName`}
                                     control={form.control}
                                     render={({ field: controllerField, fieldState }) => (
@@ -383,6 +352,26 @@ export function CreateOrganizationForm() {
                                                     aria-invalid={fieldState.invalid}
                                                     id={`addressList.${index}.settlementName`}
                                                     placeholder="Населенный пункт"
+                                                />
+                                            </InputGroup>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                                <Controller
+                                    name={`addressList.${index}.streetName`}
+                                    control={form.control}
+                                    render={({ field: controllerField, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor={`addressList.${index}.streetName`} className="text-xs">Улица</FieldLabel>
+                                            <InputGroup>
+                                                <InputGroupInput
+                                                    {...controllerField}
+                                                    aria-invalid={fieldState.invalid}
+                                                    id={`addressList.${index}.streetName`}
+                                                    placeholder="Улица"
                                                 />
                                             </InputGroup>
                                             {fieldState.invalid && (
@@ -474,14 +463,14 @@ export function CreateOrganizationForm() {
                             </FieldGroup>
 
 
-                            {fields.length > 1 && (
+                            {addressListFields.length > 1 && (
                                 <InputGroupAddon align="inline-end">
                                     <InputGroupButton
                                         type="button"
                                         variant="ghost"
                                         size="icon-xs"
-                                        onClick={() => remove(index)}
-                                        aria-label={`Remove email ${index + 1}`}
+                                        onClick={() => removeAddressList(index)}
+                                        aria-label={`Remove address ${index + 1}`}
                                     >
                                         <XIcon />
                                         Убрать {field.addressKindCode === "1" ? "адрес регистрации" : field.addressKindCode === "2" ? "адрес фактический" : "адрес почтовый"}
@@ -492,6 +481,142 @@ export function CreateOrganizationForm() {
 
                     ))}
 
+                </FieldGroup>
+            </FieldSet>
+            <Separator />
+            <FieldSet className="gap-4">
+                <FieldLegend variant="label">
+                    Связь с организацией
+                </FieldLegend>
+                <FieldDescription className="text-xs">
+                    Укажите веб-сайт, электронную почту, телефон или другие контактные данные.
+                </FieldDescription>
+                <Button
+                    type="button"
+                    size="xs"
+                    className="w-1/6"
+                    onClick={() => {
+                        appendCommunicationsList({ channelCode: "", contact: "", name: "" })
+                    }}
+                    disabled={communicationsListFields.length > 9}
+                >
+                    <RadioTowerIcon />
+                    Добавить средство связи
+                </Button>
+                <FieldError errors={[form.formState.errors.communicationsList?.root]}></FieldError>
+                <FieldGroup className="flex flex-col gap-4">
+                    {communicationsListFields.map((field, index) => (
+                        <Field key={field.id}>
+                            <FieldGroup className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+                                <Controller
+                                    name={`communicationsList.${index}.channelCode`}
+                                    control={form.control}
+                                    render={({ field: controllerField, fieldState }) => (
+                                        < Field data-invalid={fieldState.invalid}>
+                                            <FieldContent>
+                                                <FieldLabel htmlFor={`communicationsList.${index}.channelCode`} className="text-xs">
+                                                    Канал связи
+                                                </FieldLabel>
+                                            </FieldContent>
+                                            <Select
+                                                name={controllerField.name}
+                                                value={controllerField.value}
+                                                onValueChange={controllerField.onChange}
+                                                items={[
+                                                    { value: "AO", label: "AO (Веб-сайт)" },
+                                                    { value: "EM", label: "EM (Электронная почта)" },
+                                                    { value: "FX", label: "FX (Телефакс)" },
+                                                    { value: "TE", label: "TE (Телефон)" },
+                                                    { value: "TG", label: "TG (Телеграф)" },
+                                                    { value: "TL", label: "TL (Телекс)" },
+                                                    { value: "ZA", label: "ZA (Специальная связь)" },
+                                                    { value: "ZB", label: "ZB (Радиосвязь)" },
+                                                    { value: "ZZ", label: "ZZ (Иной вид связи)" },
+                                                ]}
+                                            >
+                                                <SelectTrigger
+                                                    id={`communicationsList.${index}.channelCode`}
+                                                    aria-invalid={fieldState.invalid}
+                                                >
+                                                    <SelectValue placeholder="Выберите канал связи" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectItem value={'AO'}>AO (Веб-сайт)</SelectItem>
+                                                        <SelectItem value={'EM'}>EM (Электронная почта)</SelectItem>
+                                                        <SelectItem value={'FX'}>FX (Телефакс)</SelectItem>
+                                                        <SelectItem value={'TE'}>TE (Телефон)</SelectItem>
+                                                        <SelectItem value={'TG'}>TG (Телеграф)</SelectItem>
+                                                        <SelectItem value={'TL'}>TL (Телекс)</SelectItem>
+                                                        <SelectItem value={'ZA'}>ZA (Специальная связь)</SelectItem>
+                                                        <SelectItem value={'ZB'}>ZB (Радиосвязь)</SelectItem>
+                                                        <SelectItem value={'ZZ'}>ZZ (Иной вид связи)</SelectItem>
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                        </Field>
+                                    )}
+                                />
+                                <Controller
+                                    name={`communicationsList.${index}.contact`}
+                                    control={form.control}
+                                    render={({ field: controllerField, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor={`communicationsList.${index}.contact`} className="text-xs">Контакт</FieldLabel>
+                                            <InputGroup>
+                                                <InputGroupInput
+                                                    {...controllerField}
+                                                    aria-invalid={fieldState.invalid}
+                                                    id={`communicationsList.${index}.contact`}
+                                                    placeholder="Контакт"
+                                                />
+                                            </InputGroup>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                                <Controller
+                                    name={`communicationsList.${index}.name`}
+                                    control={form.control}
+                                    render={({ field: controllerField, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor={`communicationsList.${index}.name`} className="text-xs">Чей канал связи</FieldLabel>
+                                            <InputGroup>
+                                                <InputGroupInput
+                                                    {...controllerField}
+                                                    aria-invalid={fieldState.invalid}
+                                                    id={`communicationsList.${index}.name`}
+                                                    placeholder="Директор, приемная"
+                                                />
+                                            </InputGroup>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                                <div className="self-center mt-6">
+                                    {communicationsListFields.length > 1 && (
+                                        <InputGroupAddon align="inline-end">
+                                            <InputGroupButton
+                                                type="button"
+                                                variant="ghost"
+                                                size="xs"
+                                                onClick={() => removeCommunicationsList(index)}
+                                                aria-label={`Remove communication ${index + 1}`}
+                                            >
+                                                <XIcon />
+                                                Убрать
+                                            </InputGroupButton>
+                                        </InputGroupAddon>
+                                    )}
+                                </div>
+                            </FieldGroup>
+                        </Field>
+                    ))}
                 </FieldGroup>
             </FieldSet>
         </form>

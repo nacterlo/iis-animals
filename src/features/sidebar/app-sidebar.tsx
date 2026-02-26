@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/kit/sidebar"
-import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon } from "lucide-react"
+import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon, BirdIcon } from "lucide-react"
 
 import Cattle from "@/features/sidebar/assets/cow.svg?react"
 import Pig from "@/features/sidebar/assets/pig.svg?react"
@@ -62,7 +62,7 @@ const data = {
     {
       title: "Лошади",
       url: "/horses",
-      icon: ( 
+      icon: (
         <Horse
         />
       ),
@@ -109,10 +109,17 @@ const data = {
       ),
     },
     {
-      title: "Инкубационные яйца",
-      url: "/egg", 
+      title: "Домашняя птица",
+      url: "/poulty",
       icon: (
-        <Egg
+        <BirdIcon className="text-primary" />
+      ),
+    },
+    {
+      title: "Инкубационные яйца",
+      url: "/egg",
+      icon: (
+        <Egg className="text-amber-500"
         />
       ),
     },

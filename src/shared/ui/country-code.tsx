@@ -56,10 +56,4 @@ export function CountryCode({ countryCode }: { countryCode: string }) {
         default:
             return countryCode;
     }
-
-    return (
-        <div>
-            <h2>Country Code</h2>
-        </div>
-    )
 }

@@ -1,10 +1,12 @@
 import { Button } from "@/shared/ui/kit/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/kit/card"
 import { Field } from "@/shared/ui/kit/field"
-import { ArrowBigLeftIcon } from "lucide-react"
+import { ArrowBigLeftIcon, Loader2Icon } from "lucide-react"
 import { useNavigate } from "react-router"
 import { CreateOrganizationForm } from "./ui/create-organization-form"
 import { Separator } from "@/shared/ui/kit/separator"
+import { useOrganizationCreate } from "./model/use-organization-create"
+import { ScrollArea } from "@/shared/ui/kit/scroll-area"
 
 
 
@@ -12,6 +14,9 @@ import { Separator } from "@/shared/ui/kit/separator"
 export function OrganizationCreatePage() {
 
     const navigate = useNavigate()
+
+    const { createOrganization, isPending, errorMessage } = useOrganizationCreate()
+
     return (
         <div className="w-full min-w-7xl self-center flex flex-col items-start gap-4 min-h-[calc(100svh-var(--header-height)-5rem)]">
             <Button variant="ghost" size="xs" onClick={() => navigate(-1)}>
@@ -24,21 +29,32 @@ export function OrganizationCreatePage() {
                     <CardDescription>
                         Заполните форму для добавления новой организации.
                     </CardDescription>
-                {/* <Separator/> */}
                 </CardHeader>
+                    {/* <Separator/> */}
                 <CardContent className="flex-1">
                     {/* <div className="h-[calc(100%-var(--header-height)-5rem)] overflow-y-auto"> */}
-                        <CreateOrganizationForm />
+                    {/* <ScrollArea className='h-[calc(100svh-21rem)]'> */}
+                        <CreateOrganizationForm createOrganization={createOrganization} />
+                    {/* </ScrollArea> */}
                     {/* </div> */}
                 </CardContent>
-                <Separator/>
-                <CardFooter>
+                {/* <Separator /> */}
+                <CardFooter className="self-end">
                     <Field orientation="horizontal">
-                        <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                        <Button size="sm" type="button" variant="outline" onClick={() => navigate(-1)}>
                             Отмена
                         </Button>
-                        <Button type="submit" form="organization-create-form">
-                            Добавить организацию
+                        <Button
+                            size="sm"
+                            type="submit"
+                            form="organization-create-form"
+                            disabled={isPending}
+                        >
+                            {isPending ? (
+                                <Loader2Icon className="animate-spin" />
+                            ) : (
+                                'Добавить организацию'
+                            )}
                         </Button>
                     </Field>
                 </CardFooter>

@@ -1,7 +1,7 @@
 import api from "@/shared/api/instance-axios";
 import type { CreateOrganization } from "./model/types";
 
-type OrganizationSmall = {
+export type OrganizationSmall = {
     countryCode: string,
     id: number,
     name: string
@@ -31,6 +31,7 @@ type CommunicationsList = {
     contact: string, // кто на связи
     name: string // конкретный контакт
 }
+
 type AddressList = {
     addressKindCode: string, // Тип адреса
     buildingNumber: string, // Номер дома
@@ -49,10 +50,23 @@ type AddressList = {
     }
 }
 
+ type OrganizationListParams = {
+    page?: number;
+    limit?: number;
+    search?: string;
+}
+
 export const organizationApi = {
-    getOrganizationList: () =>
-        api.get<OrganizationList>(`/organization/list?limit=500&page=1`)
-            .then(response => response.data),
+    getOrganizationList: async (params: OrganizationListParams) => {
+
+        const queryParams = new URLSearchParams()
+        params.limit && queryParams.append('limit', params.limit.toString())
+        params.page && queryParams.append('page', params.page.toString())
+        params.search && queryParams.append('name', params.search)
+
+        const response = await api.get<OrganizationList>(`/organization/list?${queryParams.toString()}`);
+        return response.data;
+    },
 
     getOrganizationDetail: (id: number) =>
         api.get<OrganizationFull>(`/organization/${id}`)
@@ -60,5 +74,9 @@ export const organizationApi = {
 
     createOrganization: (createData: CreateOrganization) =>
         api.post<void>(`/organization`, createData)
+            .then(response => console.log(response)),
+
+    updateOrganization: (updateData: CreateOrganization) =>
+        api.put<void>(`/organization`, updateData)
             .then(response => console.log(response))
 }

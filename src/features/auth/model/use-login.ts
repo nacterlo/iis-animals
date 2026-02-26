@@ -9,14 +9,12 @@ export function useLogin() {
     const navigate = useNavigate()
 
     const loginMutation = useMutation({
-        mutationFn: (credentials: { login: string, password: string }) => {
-            return authApi.login(credentials)
-        },
+        mutationFn: authApi.login,
         onSuccess: (data) => {
             // console.log(data);
             console.log(data);
             localStorage.setItem('token', JSON.stringify(data))
-            navigate('/')
+            navigate('/home')
         },
         onError: (error) => {
             toast.error(error.message)
@@ -27,8 +25,8 @@ export function useLogin() {
         loginMutation.mutate(credentials)
     }
 
-    const errorMessage = loginMutation.error 
-        ? loginMutation.error.message 
+    const errorMessage = loginMutation.error
+        ? loginMutation.error.message
         : undefined
 
     return {

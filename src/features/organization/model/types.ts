@@ -1,3 +1,4 @@
+import * as z from "zod"
 //post
 export type CreateOrganization = {
     businessEntityName: string,//Полное наименование
@@ -31,3 +32,57 @@ export type CommunicationsList = {
     contact: string,//последовательность символов, идентифицирующая канал связи
     name: string// чей телефон
 }
+
+
+const addressListSchema = z
+    .object({
+        addressKindCode: z.string(),
+        regionName: z.string().min(1, "Обязательное поле!"),         // область
+        districtName: z.string(),       // район
+        cityName: z.string(),           // город 
+        settlementName: z.string(),     // населенный пункт
+        streetName: z.string().min(1, "Обязательное поле!"),          // улица
+        buildingNumber: z.string().min(1, "Обязательное поле!"),      // дом, корпус
+        roomNumber: z.string(),         // квартира, офис 
+        postCode: z.string().min(1, "Обязательное поле!"),            // почтовый индекс
+        postOfficeBox: z.string(),      // почтовый ящик
+        territoryCode: z.string(),      // 
+        countryCodeType: z.string(),    //
+    })
+    .superRefine((a, ctx) => {
+        const hasCity = a.cityName.trim() !== "";
+        const hasSettlement = a.settlementName.trim() !== "";
+
+        if (!hasCity && !hasSettlement) {
+            ctx.addIssue({
+                code: "custom",
+                message: "Заполните город или населенный пункт",
+                path: ["cityName"],
+            });
+            ctx.addIssue({
+                code: "custom",
+                message: "Заполните город или населенный пункт",
+                path: ["settlementName"],
+            });
+        }
+    });
+
+const communicationsListSchema = z
+    .object({
+        channelCode: z.string().min(1, "Обязательное поле!"),
+        contact: z.string().min(1, "Обязательное поле!"),
+        name: z.string()
+    })
+
+export const createOrganizationSchema = z
+    .object({
+        businessEntityBriefName: z.string().min(1, "Обязательное поле!").max(100, "Максимальная длина 100 символов"),
+        businessEntityName: z.string().min(1, "Обязательное поле!").max(100, "Максимальная длина 100 символов"),
+        businessEntityTypeName: z.string(),
+        countryCode: z.string().min(1, "Обязательное поле!").max(100, "Максимальная длина 100 символов"),
+        taxpayer: z.string().min(1, "Обязательное поле!").max(20, "Максимальная длина 20 символов"),
+        taxRegistrationReasonCode: z.string(),
+        uniqueCustomsNumber: z.string(),
+        addressList: z.array(addressListSchema).min(1, "Добавьте хотябы один адрес!"),
+        communicationsList: z.array(communicationsListSchema).min(1, "Добавьте хотябы один контакт!")
+    })

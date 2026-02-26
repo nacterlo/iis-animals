@@ -4,8 +4,6 @@ import { SidebarInset } from "./kit/sidebar";
 import { Outlet } from "react-router";
 
 
-
-
 export function SiteLayout() {
     return (
         <div className="[--header-height:calc(--spacing(14))]">
@@ -15,7 +13,7 @@ export function SiteLayout() {
                 <SidebarInset>
                     <div className="flex flex-1 flex-col gap-4 p-4">
                         <div className="bg-background min-h-screen flex-1 rounded-xl md:min-h-min">
-                            <div className="flex flex-col  gap-4 max-w-7xl mx-auto w-full mt-4">
+                            <div className="flex flex-col  gap-4 max-w-7xl mx-auto w-full">
                                 <Outlet />
                             </div>
                         </div>
