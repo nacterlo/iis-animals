@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/kit/sidebar"
-import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon, BirdIcon } from "lucide-react"
+import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon, BirdIcon, BlocksIcon } from "lucide-react"
 
 import Cattle from "@/features/sidebar/assets/cow.svg?react"
 import Pig from "@/features/sidebar/assets/pig.svg?react"
@@ -178,10 +178,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<a href="#" />}>
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-9 items-center justify-center rounded-lg">
-                <BringToFrontIcon className="animate-pulse size-6!" />
+                <BlocksIcon className="animate-pulse size-6!" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">ИИС</span>
+                <span className="truncate font-extrabold">ИИС</span>
                 <span className="truncate text-xs">Интегрированная информационная система</span>
               </div>
             </SidebarMenuButton>

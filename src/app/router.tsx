@@ -1,12 +1,10 @@
-import { LoginForm } from "@/features/auth/ui/login-form";
 import { createBrowserRouter } from "react-router";
-import { Providers } from "./providers";
 import App from "./app";
-import { AnimalsPage } from "@/features/animals/animals.page";
-import { CattlePage } from "@/features/animals/pages/cattle.page";
+import { LoginForm } from "@/features/auth/ui/login-form";
+import { Providers } from "./providers";
 import { SiteLayout } from "@/shared/ui/layout";
-import { OrganizationDetail } from "@/features/organization/organization-detail";
-import { OrganizationCreatePage } from "@/features/organization/organization-create";
+import { OrganizationDetail } from "@/features/organization/ui/pages/organization-detail";
+import { OrganizationCreatePage } from "@/features/organization/ui/pages/organization-create";
 
 
 
@@ -41,7 +39,7 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                lazy: () => import("@/features/organization/organization.page"),
+                                lazy: () => import("@/features/organization/ui/pages/organization.page"),
                                 HydrateFallback: () => <div>Loading...</div>,
                             },
                             { path: ":id", element: <OrganizationDetail /> },

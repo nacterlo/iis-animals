@@ -37,7 +37,7 @@ export function NavMain({
         render={<Link to="/organization" />}
         className="mt-1"
       >
-        <Building2Icon className="text-primary"/>
+        <Building2Icon />
         <span>Управление организациями</span>
       </SidebarMenuButton>
       <SidebarGroupLabel className="font-bold mt-2">Вид животного</SidebarGroupLabel>

@@ -10,19 +10,21 @@ import {
 import { Button } from "@/shared/ui/kit/button"
 import { Separator } from "@/shared/ui/kit/separator"
 import { useSidebar } from "@/shared/ui/kit/sidebar"
+import { ThemeModeToogle } from "@/shared/ui/theme/theme-switcher"
 import { PanelLeftIcon } from "lucide-react"
 import { useLocation } from "react-router"
+import { CommandIIS } from "./command-iis"
 
 
 const getBreadcrumbTitle = (pathname: string) => {
-      switch (pathname) {
-        case "cattle":
-          return "Крупный рогатый скот"
-        case "pigs":
-          return "Свиньи"
-        default:
-          return "Главная"
-      }
+  switch (pathname) {
+    case "cattle":
+      return "Крупный рогатый скот"
+    case "pigs":
+      return "Свиньи"
+    default:
+      return "Главная"
+  }
 }
 
 export function SiteHeader() {
@@ -31,7 +33,7 @@ export function SiteHeader() {
   const location = useLocation()
 
   const arrPath = location.pathname.split("/")
-  
+
   return (
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
       <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
@@ -55,11 +57,16 @@ export function SiteHeader() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-            <BreadcrumbPage>{getBreadcrumbTitle(arrPath[1])}</BreadcrumbPage>
+              <BreadcrumbPage>{getBreadcrumbTitle(arrPath[1])}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+        <div className="flex gap-2 ml-auto">
+          <CommandIIS />
+          <Separator orientation="vertical"/>
+          <ThemeModeToogle />
+        </div>
+        {/* <SearchForm className="w-full sm:ml-auto sm:w-auto" /> */}
       </div>
     </header>
   )

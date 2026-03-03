@@ -1,15 +1,16 @@
-import { useOrganizationList } from "./model/use-organization-list"
+
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { Link } from "react-router";
 import { useDebouncedValue } from "@/shared/lib/react/use-debounced-value";
-import { useOrganizationFilters } from "./model/use-organization-filters";
-import { OrganizationSearchInput } from "./ui/organization-search-input";
-import { OrganizationPagination } from "./ui/organization-pagination";
-import { useOrganizationPagination } from "./model/use-organization-pagination";
-import { OrganizationTable } from "./ui/organization-table";
 import { SpinLoader } from "@/shared/ui/loaders";
 import { ErrorComponent } from "@/shared/ui/errors";
+import { useOrganizationFilters } from "../../model/use-organization-filters";
+import { useOrganizationPagination } from "../../model/use-organization-pagination";
+import { useOrganizationList } from "../../model/use-organization-list";
+import { OrganizationSearchInput } from "../organization-search-input";
+import { OrganizationTable } from "../organization-table";
+import { OrganizationPagination } from "../organization-pagination";
 
 
 function OrganizationPage() {
