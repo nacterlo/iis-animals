@@ -2,116 +2,52 @@ import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
-  AvatarImage,
 } from "@/shared/ui/kit/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/shared/ui/kit/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/shared/ui/kit/sidebar"
-import { ChevronsUpDownIcon, SparklesIcon, BadgeCheckIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import { Button } from "@/shared/ui/kit/button"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/kit/tooltip"
+import { LogOutIcon } from "lucide-react"
+import { useNavigate } from "react-router"
 
 export function NavUser({
-  user,
+  userString,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  userString: string
 }) {
-  const { isMobile } = useSidebar()
+  const user = JSON.parse(userString)
+
+  const navigate = useNavigate()
+
+  const logout = () => {
+    sessionStorage.clear()
+    navigate('/auth/login')
+  }
+
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <SidebarMenuButton
-                size="lg"
-                className="aria-expanded:bg-muted aria-expanded:text-foreground"
-              />
-            }
+    <div className="flex gap-2 items-center bg-muted/80 rounded-lg p-2 border">
+      <Avatar>
+        <AvatarFallback>IIS</AvatarFallback>
+        <AvatarBadge className="bg-green-800 dark:bg-green-600" />
+      </Avatar>
+      <div className="grid flex-1 text-left text-sm leading-tight">
+        <span className="truncate font-medium">{user.login}</span>
+        <span className="truncate text-xs">Доступ {user.access}го уровня.</span>
+      </div>
+      <Tooltip>
+        <TooltipTrigger render={
+          <Button
+            variant='link'
+            size='icon-sm'
+            className='ml-auto'
+            onClick={logout}
           >
-            <Avatar>
-              {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-              <AvatarFallback>IIS</AvatarFallback>
-              <AvatarBadge className="bg-green-800 dark:bg-green-600" />
-            </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
-            </div>
-            <ChevronsUpDownIcon className="ml-auto size-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="bg-primary">
-                    {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                    <AvatarFallback >IIS</AvatarFallback>
-                    <AvatarBadge className="bg-green-600 dark:bg-green-800" />
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="truncate text-xs">{user.email}</span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <SparklesIcon
-                />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheckIcon
-                />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon
-                />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon
-                />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <LogOutIcon
-                />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+            <LogOutIcon />
+          </Button>
+        }
+        />
+        <TooltipContent side="top" align="start">
+          <p>Нажмите, чтобы выйти из ИИС</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
   )
 }

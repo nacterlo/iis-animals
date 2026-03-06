@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
-import { updateOrganizationSchema, type OrganizationDetail, type UpdateOrganization } from "../model/types"
+import { updateOrganizationSchema, type OrganizationDetail } from "../model/types"
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/shared/ui/kit/field"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupTextarea } from "@/shared/ui/kit/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/kit/select"
@@ -511,7 +511,7 @@ export function UpdateOrganizationForm({
                         </Button>
                         {communicationsListFields.map((field, index) => (
                             <Field key={field.id}>
-                                <FieldGroup className="grid grid-cols-4 gap-4 border p-2 rounded">
+                                <FieldGroup className="grid grid-cols-[1fr_1fr_1fr_.5fr] gap-4 border p-2 rounded">
                                     <Controller
                                         name={`communicationsList.${index}.channelCode`}
                                         control={form.control}

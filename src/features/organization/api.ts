@@ -15,7 +15,7 @@ type OrganizationList = {
     totalPage: number
 }
 
-type OrganizationListParams = {
+export type OrganizationListParams = {
     page?: number;
     limit?: number;
     search?: string;
@@ -29,7 +29,7 @@ export const organizationApi = {
         params.page && queryParams.append('page', params.page.toString())
         params.search && queryParams.append('name', params.search)
 
-        const response = await api.get<OrganizationList>(`/organization/list?${queryParams.toString()}`);
+        const response = await api.get<OrganizationList>(`/organization/list?${queryParams.toString()}`)
         return response.data;
     },
 

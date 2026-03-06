@@ -13,7 +13,7 @@ export function useLogin() {
         onSuccess: (data) => {
             // console.log(data);
             console.log(data);
-            localStorage.setItem('token', JSON.stringify(data))
+            sessionStorage.setItem('token', JSON.stringify(data))
             navigate('/home')
         },
         onError: (error) => {

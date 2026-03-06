@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/kit/sidebar"
-import { SendIcon, SettingsIcon, BringToFrontIcon, Egg, SlackIcon, BirdIcon, BlocksIcon } from "lucide-react"
+import { SendIcon, SettingsIcon, Egg, SlackIcon, BirdIcon, BlocksIcon } from "lucide-react"
 
 import Cattle from "@/features/sidebar/assets/cow.svg?react"
 import Pig from "@/features/sidebar/assets/pig.svg?react"
@@ -26,28 +26,23 @@ import Fish from "@/features/sidebar/assets/fish.svg?react"
 import Bee from "@/features/sidebar/assets/bee.svg?react"
 
 const data = {
-  user: {
-    name: "admin",
-    email: "admin@admin.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Крупный рогатый скот",
-      url: "/cattle/dairy",
+      url: "/cattle-dairy",
       icon: (
         <Cattle
         />
       ),
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "Молочного направления",
-          url: "#",
+          url: "/cattle-dairy",
         },
         {
           title: "Мясного направления",
-          url: "#",
+          url: "/cattle-beef",
         },
       ],
     },
@@ -74,6 +69,29 @@ const data = {
         <Sheep
         />
       ),
+      isActive: false,
+      items: [
+        {
+          title: "Грубошестного и полугрубошерстного",
+          url: "/sheep-rough-haired",
+        },
+        {
+          title: "Романовской породы",
+          url: "/sheep-romanov",
+        },
+        {
+          title: "Смушкового направления",
+          url: "/sheep-smushkovy",
+        },
+        {
+          title: "Тонкорунного и полутонкорунного направления",
+          url: "/sheep-fine-fleeced",
+        },
+        {
+          title: "Мясного короткошерстного направления",
+          url: "/sheep-meat-shorthair",
+        },
+      ],
     },
     {
       title: "Козы",
@@ -82,6 +100,25 @@ const data = {
         <Goat
         />
       ),
+      isActive: false,
+      items: [
+        {
+          title: "Молочного направления",
+          url: "/goat-dairy",
+        },
+        {
+          title: "Мясного направления",
+          url: "/goat-beef",
+        },
+        {
+          title: "Шерстяного направления",
+          url: "/goat-wood",
+        },
+        {
+          title: "Пухового направления",
+          url: "/goat-downy",
+        }
+      ],
     },
 
     {
@@ -102,7 +139,7 @@ const data = {
     },
     {
       title: "Пушные звери",
-      url: "/mink",
+      url: "/furry",
       icon: (
         <Mink
         />
@@ -167,7 +204,9 @@ const data = {
     },
   ],
 }
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const user = sessionStorage.getItem('token')
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -190,10 +229,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {user && <NavUser userString={user} />}
       </SidebarFooter>
     </Sidebar>
   )

@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/features/sidebar/app-sidebar";
 import { SiteHeader } from "@/features/sidebar/ui/site-header";
 import { SidebarInset } from "./kit/sidebar";
-import { Outlet } from "react-router";
+import { ProtectedOutlet } from "@/app/protected-route";
 
 
 export function SiteLayout() {
@@ -14,7 +14,7 @@ export function SiteLayout() {
                     <div className="flex flex-1 flex-col gap-4 p-4">
                         <div className="bg-background min-h-screen flex-1 rounded-xl md:min-h-min">
                             <div className="flex flex-col  gap-4 max-w-7xl mx-auto w-full">
-                                <Outlet />
+                                <ProtectedOutlet />
                             </div>
                         </div>
                     </div>

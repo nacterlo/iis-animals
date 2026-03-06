@@ -15,12 +15,25 @@ import Fish from "@/features/sidebar/assets/fish.svg?react"
 import Bee from "@/features/sidebar/assets/bee.svg?react"
 import { Separator } from "@/shared/ui/kit/separator"
 import { Link } from "react-router"
+import { useEffect } from "react"
 
 
 
 
 export function CommandIIS() {
     const { isOpen, open, close } = useCommand()
+
+    useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === "л" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                isOpen ? close() : open()
+            }
+        }
+
+        document.addEventListener("keydown", down)
+        return () => document.removeEventListener("keydown", down)
+    }, [])
 
     return (
         <div className="flex flex-col gap-4">

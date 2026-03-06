@@ -12,7 +12,10 @@ export const authApi = {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 if (error.response.data.error === 'Unauthorized') {
-                    throw new Error('Неверный логин или пароль!')
+                    throw new Error('Неверный логин или пароль.')
+                }
+                if (error.response.data.error === 'Внутренняя ошибка сервера') {
+                    throw new Error('Проверьте введенный пароль.')
                 }
                 console.log(error.response.data);
                 console.log(error.response.status);

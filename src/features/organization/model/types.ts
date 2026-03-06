@@ -42,7 +42,7 @@ export type CreateOrganization = {
 
 export type AdressList = {
     addressKindCode: string,// Вид адреса(адрес регистрации, фактический адрес, почтовый адрес)
-    buildingNumber: string,// дом корпус строение
+    buildingNumber?: string,// дом корпус строение
     cityName?: string,// город
     districtName?: string,// район
     postCode: string,// почтовый индекс
@@ -70,7 +70,7 @@ const addressListSchema = z
         cityName: z.string().optional(),           // город 
         settlementName: z.string().optional(),     // населенный пункт
         streetName: z.string().min(1, "Обязательное поле!"),          // улица
-        buildingNumber: z.string().min(1, "Обязательное поле!"),      // дом, корпус
+        buildingNumber: z.string().optional(),      // дом, корпус
         roomNumber: z.string().optional(),         // квартира, офис 
         postCode: z.string().min(1, "Обязательное поле!"),            // почтовый индекс
         postOfficeBox: z.string().optional(),      // почтовый ящик

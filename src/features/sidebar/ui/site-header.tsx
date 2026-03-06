@@ -18,6 +18,8 @@ import { CommandIIS } from "./command-iis"
 
 const getBreadcrumbTitle = (pathname: string) => {
   switch (pathname) {
+    case "organization":
+      return "Управление организациями"
     case "cattle":
       return "Крупный рогатый скот"
     case "pigs":
@@ -63,7 +65,7 @@ export function SiteHeader() {
         </Breadcrumb>
         <div className="flex gap-2 ml-auto">
           <CommandIIS />
-          <Separator orientation="vertical"/>
+          <Separator orientation="vertical" />
           <ThemeModeToogle />
         </div>
         {/* <SearchForm className="w-full sm:ml-auto sm:w-auto" /> */}

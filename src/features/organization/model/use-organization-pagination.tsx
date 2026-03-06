@@ -8,7 +8,7 @@ import { useState } from "react";
 export function useOrganizationPagination() {
 
     const limit = CONFIG.DEFAULT_LIMIT
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(1)
 
     return {
         page,

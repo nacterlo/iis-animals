@@ -17,14 +17,12 @@ export const useOrganizationUpdate = () => {
         onSettled: async () => await queryClient.invalidateQueries({ queryKey: ["organization"] }),
     })
 
-    const updateOrganization = (data: UpdateOrganization) =>
-        updateOrganizationMutation.mutate(data)
 
     const errorMessage = updateOrganizationMutation.error
         ? updateOrganizationMutation.error.message
         : undefined
     return {
-        updateOrganization,
+        updateOrganization: (data: UpdateOrganization) => updateOrganizationMutation.mutate(data),
         updatingOrganization: updateOrganizationMutation.isPending,
         errorMessage,
     }

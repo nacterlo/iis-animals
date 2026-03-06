@@ -34,7 +34,7 @@ function OrganizationPage() {
         return (
             <div className="flex flex-col items-start gap-4">
                 <h1 className="text-2xl font-bold">Управление организациями</h1>
-                <div className="flex items-center justify-between gap-4 w-full ">
+                <div className="flex items-center justify-between gap-4 w-full">
                     <OrganizationSearchInput
                         value={organizationFilters.search}
                         onChange={organizationFilters.setSearch}

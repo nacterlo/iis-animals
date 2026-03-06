@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 
-export function useDelay(delay = 250): boolean {
+export function useDelay(delay = 100): boolean {
     const [shouldRender, setShouldRender] = useState(false)
 
     useEffect(() => {
