@@ -23,6 +23,11 @@ import { CamelPage } from "@/features/animals/pages/camel.page";
 import { FurryPage } from "@/features/animals/pages/furry.page";
 import { PoultyPage } from "@/features/animals/pages/poulty.page";
 import { EggPage } from "@/features/animals/pages/egg.page";
+import { FishPage } from "@/features/animals/pages/fish.page";
+import { BeePage } from "@/features/animals/pages/bee.page";
+import { SpermPage } from "@/features/animals/pages/sperm.page";
+import { CattleDairyDetailPage } from "@/features/animals/pages/cattle-dairy-detail.page";
+import { CattleBeefDetailPage } from "@/features/animals/pages/cattle-beef-detail.page";
 
 
 export const router = createBrowserRouter([
@@ -64,7 +69,7 @@ export const router = createBrowserRouter([
                         path: "cattle-dairy",
                         children: [
                             { index: true, element: <CattleDairyPage /> },
-                            { path: ":id", element: <div>cattle-dairy detail</div> },
+                            { path: ":id", element: <CattleDairyDetailPage /> },
                             { path: "create", element: <div>create</div> }
                         ],
                     },
@@ -72,7 +77,7 @@ export const router = createBrowserRouter([
                         path: "cattle-beef",
                         children: [
                             { index: true, element: <CattleBeefPage /> },
-                            { path: ":id", element: <div>cattle-beef detail</div> },
+                            { path: ":id", element: <CattleBeefDetailPage /> },
                             { path: "create", element: <div>create beef</div> }
                         ],
                     },
@@ -207,7 +212,7 @@ export const router = createBrowserRouter([
                     {
                         path: "/fish",
                         children: [
-                            { index: true, element: <CattleBeefPage /> },
+                            { index: true, element: <FishPage /> },
                             { path: ":id", element: <div>cattle-beef detail</div> },
                             { path: "create", element: <div>create beef</div> }
                         ],
@@ -215,7 +220,7 @@ export const router = createBrowserRouter([
                     {
                         path: "/bee",
                         children: [
-                            { index: true, element: <CattleBeefPage /> },
+                            { index: true, element: <BeePage /> },
                             { path: ":id", element: <div>cattle-beef detail</div> },
                             { path: "create", element: <div>create beef</div> }
                         ],
@@ -223,7 +228,7 @@ export const router = createBrowserRouter([
                     {
                         path: "/sperm",
                         children: [
-                            { index: true, element: <CattleBeefPage /> },
+                            { index: true, element: <SpermPage /> },
                             { path: ":id", element: <div>cattle-beef detail</div> },
                             { path: "create", element: <div>create beef</div> }
                         ],
