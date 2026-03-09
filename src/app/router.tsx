@@ -28,6 +28,7 @@ import { BeePage } from "@/features/animals/pages/bee.page";
 import { SpermPage } from "@/features/animals/pages/sperm.page";
 import { CattleDairyDetailPage } from "@/features/animals/pages/cattle-dairy-detail.page";
 import { CattleBeefDetailPage } from "@/features/animals/pages/cattle-beef-detail.page";
+import { CattleBeefCreatePage } from "@/features/animals/pages/cattle-beef-create.page";
 
 
 export const router = createBrowserRouter([
@@ -78,7 +79,7 @@ export const router = createBrowserRouter([
                         children: [
                             { index: true, element: <CattleBeefPage /> },
                             { path: ":id", element: <CattleBeefDetailPage /> },
-                            { path: "create", element: <div>create beef</div> }
+                            { path: "create", element: <CattleBeefCreatePage /> }
                         ],
                     },
                     {

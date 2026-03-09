@@ -33,6 +33,10 @@ export const organizationApi = {
         return response.data;
     },
 
+    getOrganizationFull: () =>
+        api.get<{ data: OrganizationSmall[] }>('/organization/full')
+            .then(response => response.data.data),
+
     getOrganizationDetail: (id: number) =>
         api.get<OrganizationDetail>(`/organization/${id}`)
             .then(response => response.data),

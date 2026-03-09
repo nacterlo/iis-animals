@@ -1,12 +1,10 @@
 import { ButtonLink } from "@/shared/button-link";
-import { Card } from "@/shared/ui/kit/card";
-import { Separator } from "@/shared/ui/kit/separator";
 
 
 
 
 
-export function AnimalsDeatailLayout({
+export function AnimalsCreateLayout({
     url,
     renderForm
 }: {
@@ -21,7 +19,7 @@ export function AnimalsDeatailLayout({
                 tooltipText="Вернуться к списку животных"
             />
 
-                {renderForm}
+            {renderForm}
         </div>
     )
 }
